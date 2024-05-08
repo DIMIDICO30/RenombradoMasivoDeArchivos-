@@ -1,0 +1,51 @@
+Sub CambiarNombresArchivos()
+    Dim RutaOrigen As String
+    Dim RutaDestino As String
+    Dim NombreAntiguo As String
+    Dim NombreNuevo As String
+    Dim i As Integer
+    
+    ' Desactivar la visualización de mensajes
+    Application.DisplayAlerts = False
+    
+    ' Inicializar el contador
+    i = 1
+    
+    ' Recorrer las celdas de la columna A, B, C y D hasta encontrar una celda vacía en la columna A
+    Do While Not IsEmpty(ActiveSheet.Cells(i, 1))
+        ' Obtener la ruta de origen de la celda en la columna A
+        RutaOrigen = ActiveSheet.Cells(i, 1).Value
+        
+        ' Obtener la ruta de destino de la celda en la columna B
+        RutaDestino = ActiveSheet.Cells(i, 2).Value
+        
+        ' Obtener el nombre antiguo del archivo de la celda en la columna C
+        NombreAntiguo = ActiveSheet.Cells(i, 3).Value
+        
+        ' Obtener el nombre nuevo del archivo de la celda en la columna D
+        NombreNuevo = ActiveSheet.Cells(i, 4).Value
+        
+        ' Renombrar el archivo
+        On Error Resume Next
+        Name RutaOrigen & "\" & NombreAntiguo As RutaDestino & "\" & NombreNuevo
+        If Err.Number <> 0 Then
+            ' Mostrar mensaje de error en la ventana inmediata
+            Debug.Print "Error al renombrar el archivo " & NombreAntiguo & vbCrLf & _
+                        "Ruta origen: " & RutaOrigen & vbCrLf & _
+                        "Ruta destino: " & RutaDestino
+            ' Limpiar el objeto de error
+            Err.Clear
+        End If
+        
+        ' Incrementar el contador
+        i = i + 1
+    Loop
+    
+    ' Activar la visualización de mensajes
+    Application.DisplayAlerts = True
+    
+    MsgBox "Renombrado de archivos completado.", vbInformation
+End Sub
+
+
+
